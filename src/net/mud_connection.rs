@@ -80,6 +80,8 @@ impl MudConnection {
         );
 
         let stream = open_tcp_stream(&self.host, self.port)?;
+        stream.set_nonblocking(true)?;
+        stream.set_nodelay(true)?; // Wichtig für MUDs, damit Eingaben sofort rausgehen
         if tls {
             self.tls_stream = Some(TlsStream::tls_init(stream, host, tls_validation)?);
         } else {
